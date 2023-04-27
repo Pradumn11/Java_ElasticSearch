@@ -1,0 +1,7 @@
+
+//use this to query using json format queryy using low level client
+String query="";
+SearchModule searchModule..
+XContentParser parser = XContentFactory.xContent(XContentType.JSON).createParser(new NamedXContentRegistry(searchModule
+            .getNamedXContents()), query)
+
