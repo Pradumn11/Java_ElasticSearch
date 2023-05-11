@@ -1,9 +1,9 @@
-package com.dem.ElasticsearchDemo.elasticSearchDao;
+package com.dem.ElasticsearchDemo.employee.dao;
 
 import com.dem.ElasticsearchDemo.Exception.ElasticSearchException;
 import com.dem.ElasticsearchDemo.Model.Employee;
+import com.dem.ElasticsearchDemo.elasticSearchDao.EsAbstractDao;
 import com.google.gson.Gson;
-import org.elasticsearch.ElasticsearchStatusException;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -25,7 +25,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
 @Service
-public class EmployeeElasticSearchDao extends ElasticSearchDAO {
+public class EmployeeElasticSearchDao extends EsAbstractDao {
 
 
     private final String searchTimeout;

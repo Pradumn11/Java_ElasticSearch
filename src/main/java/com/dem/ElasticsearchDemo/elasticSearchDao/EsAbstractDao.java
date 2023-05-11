@@ -26,13 +26,13 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 @Service
-public class ElasticSearchDAO {
+public class EsAbstractDao {
 
     private final RestHighLevelClient esClient;
 
 
     @Autowired
-    public ElasticSearchDAO(RestHighLevelClient esClient) {
+    public EsAbstractDao(RestHighLevelClient esClient) {
         this.esClient = esClient;
     }
 

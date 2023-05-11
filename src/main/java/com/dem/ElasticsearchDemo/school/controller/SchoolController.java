@@ -1,7 +1,7 @@
-package com.dem.ElasticsearchDemo.Controller;
+package com.dem.ElasticsearchDemo.school.controller;
 
 import com.dem.ElasticsearchDemo.Model.School;
-import com.dem.ElasticsearchDemo.elasticSearchDao.SchoolEsDao;
+import com.dem.ElasticsearchDemo.school.dao.SchoolEsDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

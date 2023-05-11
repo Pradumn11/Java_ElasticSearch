@@ -1,7 +1,8 @@
-package com.dem.ElasticsearchDemo.elasticSearchDao;
+package com.dem.ElasticsearchDemo.school.dao;
 
 import com.dem.ElasticsearchDemo.Exception.ElasticSearchException;
 import com.dem.ElasticsearchDemo.Model.School;
+import com.dem.ElasticsearchDemo.elasticSearchDao.EsAbstractDao;
 import com.google.gson.Gson;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -21,7 +22,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 
 @Repository
-public class SchoolEsDao extends ElasticSearchDAO {
+public class SchoolEsDao extends EsAbstractDao {
 
     private final String SCHOOL_IN = "school";
     private final String ID = "id";
@@ -80,7 +81,7 @@ public class SchoolEsDao extends ElasticSearchDAO {
     }
 
     private List<School> getSchoolHits(SearchResponse response) {
-        System.out.println(response.getHits().getHits().length);
+
         return Arrays.stream(response.getHits().getHits())
                 .map(this::convertSearchToSchool)
                 .collect(Collectors.toList());

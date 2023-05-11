@@ -1,7 +1,7 @@
-package com.dem.ElasticsearchDemo.Controller;
+package com.dem.ElasticsearchDemo.employee.controller;
 
 import com.dem.ElasticsearchDemo.Model.Employee;
-import com.dem.ElasticsearchDemo.elasticSearchDao.EmployeeElasticSearchDao;
+import com.dem.ElasticsearchDemo.employee.dao.EmployeeElasticSearchDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
