@@ -5,6 +5,7 @@ import com.dem.ElasticsearchDemo.Model.School;
 import com.dem.ElasticsearchDemo.elasticSearchDao.EsAbstractDao;
 import com.dem.ElasticsearchDemo.learningspace.request.AddConsumerRequest;
 import com.dem.ElasticsearchDemo.learningspace.request.GetAllConsumerRequest;
+import com.dem.ElasticsearchDemo.learningspace.response.ConsumerPreviewResponse;
 import com.dem.ElasticsearchDemo.learningspace.response.ConsumerResponse;
 import com.google.gson.Gson;
 import org.elasticsearch.action.search.SearchRequest;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @Repository
@@ -56,10 +58,13 @@ public class ConsumerEsDao extends EsAbstractDao {
         return addDocumentToIndex(INDEX_CONSUMER,id,data)
                 .thenAccept(indexResponse -> System.out.println("Index: "+indexResponse.getResult()));
     }
-    public CompletionStage<List<ConsumerResponse>>searchAllConsumerByFields(GetAllConsumerRequest request){
+    public CompletionStage<ConsumerPreviewResponse>searchAllConsumerByFields(GetAllConsumerRequest request){
         BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
-        request.getFields().entrySet()
-                .forEach(field-> queryBuilder.must(QueryBuilders.matchQuery(field.getKey(),field.getValue())));
+        if (request.getFields()!=null && !request.getFields().isEmpty()) {
+            request.getFields().entrySet()
+                    .forEach(field -> queryBuilder.must(QueryBuilders.matchPhraseQuery(field.getKey(), field.getValue())));
+        }
+        queryBuilder.must(QueryBuilders.matchPhraseQuery(TENANT_ID,request.getTenantId()));
 
         Integer offset = request.getPageNumber() * request.getPageSize();
         SearchRequest searchRequest = new SearchRequest(INDEX_CONSUMER);
@@ -69,9 +74,13 @@ public class ConsumerEsDao extends EsAbstractDao {
                 .size(request.getPageSize())
                 .timeout(TimeValue.parseTimeValue(searchTimeout, "timeout"));
         searchRequest.source(builder);
-
         return searchEsQueryResponse(searchRequest)
-                .thenApply(this::getConsumerHits)
+                .thenApply(searchResponse->{
+                    List<ConsumerResponse>hits=getConsumerHits(searchResponse);
+                    return ConsumerPreviewResponse.builder().consumers(hits)
+                            .totalCount(searchResponse.getHits().getTotalHits().value)
+                            .build();
+                })
                 .exceptionally(throwable -> {
                     throw new ElasticSearchException(throwable.getMessage());
                 });

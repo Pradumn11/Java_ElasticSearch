@@ -20,7 +20,7 @@ public class ConsumerEsService {
 
 
     public CompletionStage<ConsumerPreviewResponse>getAllConsumerByField(GetAllConsumerRequest request){
-        return consumerEsDao.searchAllConsumerByFields(request)
-                .thenApply(consumerResponses -> ConsumerPreviewResponse.builder().consumers(consumerResponses).build());
+        request.validate();
+        return consumerEsDao.searchAllConsumerByFields(request);
     }
 }
